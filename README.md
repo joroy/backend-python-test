@@ -22,7 +22,7 @@ Credentials:
 ![Todos](/web/img/todos.png?raw=true "Todos")
 
 ### Requirements
-* python 5.7
+* python 3.6
 * virtualenv
 * sqlite3
 * A github account
