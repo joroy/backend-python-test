@@ -1,8 +1,12 @@
 from flask import Flask, g
+from flask_sqlalchemy import SQLAlchemy
+
 import sqlite3
 
 # configuration
 DATABASE = '/tmp/alayatodo.db'
+SQLALCHEMY_DATABASE_URI = 'sqlite:///{db}'.format(db=DATABASE)
+SQLALCHEMY_TRACK_MODIFICATIONS = False
 DEBUG = True
 SECRET_KEY = 'development key'
 USERNAME = 'admin'
@@ -11,6 +15,7 @@ PASSWORD = 'default'
 
 app = Flask(__name__)
 app.config.from_object(__name__)
+db = SQLAlchemy(app)
 
 
 def connect_db():

@@ -1,4 +1,15 @@
-from alayatodo import app
+from alayatodo import (
+    app,
+    db
+    )
+
+
+from alayatodo.models import (
+    User,
+    Todo,
+    object_as_dict)
+
+
 from flask import (
     flash,
     g,
@@ -26,11 +37,9 @@ def login_POST():
     username = request.form.get('username')
     password = request.form.get('password')
 
-    sql = "SELECT * FROM users WHERE username = '%s' AND password = '%s'";
-    cur = g.db.execute(sql % (username, password))
-    user = cur.fetchone()
+    user = User.query.filter_by(username=username, password=password).first()
     if user:
-        session['user'] = dict(user)
+        session['user'] = object_as_dict(user)
         session['logged_in'] = True
         return redirect('/todo')
 
@@ -46,8 +55,7 @@ def logout():
 
 @app.route('/todo/<id>', methods=['GET'])
 def todo(id):
-    cur = g.db.execute("SELECT * FROM todos WHERE id ='%s'" % id)
-    todo = cur.fetchone()
+    todo = todo = Todo.query.get_or_404(id)
     return render_template('todo.html', todo=todo)
 
 
@@ -56,8 +64,7 @@ def todo(id):
 def todos():
     if not session.get('logged_in'):
         return redirect('/login')
-    cur = g.db.execute("SELECT * FROM todos")
-    todos = cur.fetchall()
+    todos = Todo.query.filter_by(user_id=session['user']['id']).all()
     return render_template('todos.html', todos=todos)
 
 
@@ -69,11 +76,9 @@ def todos_POST():
 
     description = request.form.get('description', '')
     if description:
-        g.db.execute(
-            "INSERT INTO todos (user_id, description) VALUES ('%s', '%s')"
-            % (session['user']['id'], description)
-        )
-        g.db.commit()
+        new_todo = Todo(user_id=session['user']['id'], description=description)
+        db.session.add(new_todo)
+        db.session.commit()
     else:
         flash('Description is required', 'error')
     return redirect('/todo')
@@ -83,6 +88,6 @@ def todos_POST():
 def todo_delete(id):
     if not session.get('logged_in'):
         return redirect('/login')
-    g.db.execute("DELETE FROM todos WHERE id ='%s'" % id)
-    g.db.commit()
+    db.session.delete(Todo.query.get_or_404(id))
+    db.session.commit()
     return redirect('/todo')
