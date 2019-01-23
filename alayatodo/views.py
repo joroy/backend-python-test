@@ -61,6 +61,8 @@ def logout():
 
 @app.route('/todo/<id>', methods=['GET'])
 def todo(id):
+    if not session.get('logged_in'):
+        return redirect('/login')
     todo = todo = Todo.query.get_or_404(id)
     return render_template('todo.html', todo=todo)
 
