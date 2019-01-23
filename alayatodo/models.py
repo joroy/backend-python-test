@@ -19,6 +19,7 @@ class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     description = db.Column(db.String(255))
+    done = db.Column(db.Boolean)
 
     def __init__(self, user_id, description,):
         self.user_id = user_id

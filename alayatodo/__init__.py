@@ -1,4 +1,7 @@
-from flask import Flask, g
+import logging
+import sys
+
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
 import sqlite3
@@ -24,16 +27,12 @@ def connect_db():
     return conn
 
 
-@app.before_request
-def before_request():
-    g.db = connect_db()
-
-
-@app.teardown_request
-def teardown_request(exception):
-    db = getattr(g, 'db', None)
-    if db is not None:
-        db.close()
+@app.before_first_request
+def setup_logging():
+    if not app.debug:
+        # In production mode, add log handler to sys.stdout.
+        app.logger.addHandler(logging.StreamHandler(stream=sys.stdout))
+        app.logger.setLevel(logging.INFO)
 
 
 import alayatodo.views
