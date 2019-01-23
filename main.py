@@ -30,7 +30,7 @@ if __name__ == '__main__':
         _run_sql('resources/database.sql')
         _run_sql('resources/fixtures.sql')
         print("AlayaTodo: Database initialized.")
-    if args['runmigrations']:
+    elif args['runmigrations']:
         _run_sql('resources/1to2.sql')
     else:
         app.run(use_reloader=True)
