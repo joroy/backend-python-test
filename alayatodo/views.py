@@ -20,6 +20,12 @@ from flask import (
 )
 
 
+from flask_paginate import (
+    Pagination,
+    get_page_args
+)
+
+
 @app.route('/')
 def home():
     with app.open_resource('../README.md', mode='r') as f:
@@ -64,8 +70,20 @@ def todo(id):
 def todos():
     if not session.get('logged_in'):
         return redirect('/login')
-    todos = Todo.query.filter_by(user_id=session['user']['id']).all()
-    return render_template('todos.html', todos=todos)
+
+    page, per_page, offset = get_page_args()
+    todo_paginated = Todo.query.filter_by(user_id=session['user']['id']).limit(per_page).offset(offset)
+    todos = Todo.query.filter_by(user_id=session['user']['id'])
+    n_todos = todos.count()
+
+    pagination = Pagination(page=page,
+                            per_page=per_page,
+                            offset=offset,
+                            total=n_todos,
+                            css_framework='bootstrap3',
+                            record_name='todos')
+
+    return render_template('todos.html', todos=todo_paginated, pagination=pagination)
 
 
 @app.route('/todo', methods=['POST'])

@@ -14,6 +14,7 @@ DEBUG = True
 SECRET_KEY = 'development key'
 USERNAME = 'admin'
 PASSWORD = 'default'
+PER_PAGE = 3  # small to see pagination with default fixture
 
 
 app = Flask(__name__)
