@@ -79,6 +79,7 @@ def todos_POST():
         new_todo = Todo(user_id=session['user']['id'], description=description)
         db.session.add(new_todo)
         db.session.commit()
+        flash('Todo #{} has beed added'.format(new_todo.id), 'confirmation')
     else:
         flash('Description is required', 'error')
     return redirect('/todo')
@@ -88,8 +89,9 @@ def todos_POST():
 def todo_delete(id):
     if not session.get('logged_in'):
         return redirect('/login')
-
-    db.session.delete(Todo.query.get_or_404(id))
+    todo = Todo.query.get_or_404(id)
+    flash('Todo #{} has beed deleted'.format(todo.id), 'confirmation')
+    db.session.delete(todo)
     db.session.commit()
     return redirect('/todo')
 
