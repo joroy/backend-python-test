@@ -15,7 +15,8 @@ from flask import (
     redirect,
     render_template,
     request,
-    session
+    session,
+    jsonify
 )
 
 
@@ -101,3 +102,12 @@ def todo_mark_as_done(id):
     todo.done = request.form.get('done') == '1'
     db.session.commit()
     return redirect('/todo')
+
+
+@app.route('/todo/<id>/json', methods=['GET'])
+def todo_JSON(id):
+    if not session.get('logged_in'):
+        return redirect('/login')
+    todo = Todo.query.get_or_404(id)
+    return jsonify(object_as_dict(todo))
+
