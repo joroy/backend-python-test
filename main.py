@@ -27,7 +27,8 @@ def _run_sql(filename):
 
 
 def add_default_users():
-    for user, password in [('user{}'.format(i), 'user{}'.format(i)) for i in range(1, 4)]:
+    for user, password in [('user{}'.format(i),
+                            'user{}'.format(i)) for i in range(1, 4)]:
         new_user = User(user, password)
         db.session.add(new_user)
     db.session.commit()

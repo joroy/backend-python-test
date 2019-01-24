@@ -38,4 +38,4 @@ def setup_logging():
         app.logger.setLevel(logging.INFO)
 
 
-import alayatodo.views
+import alayatodo.views  # noqa

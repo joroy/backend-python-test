@@ -57,6 +57,7 @@ def login_POST():
         flash('Provide a valid user', 'error')
         return redirect('/login')
 
+
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)
@@ -137,4 +138,3 @@ def todo_JSON(id):
         return redirect('/login')
     todo = Todo.query.get_or_404(id)
     return jsonify(object_as_dict(todo))
-
