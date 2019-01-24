@@ -3,6 +3,7 @@
 all: test
 
 install-dev:
+	pip install -r requirements.txt
 	pip install -r dev_requirements.txt
 	pip install -e .
 
