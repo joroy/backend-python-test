@@ -1,1 +1,6 @@
+flake8
+coverage
 pytest
+pytest-flask
+pytest-random-order
+pdbpp
