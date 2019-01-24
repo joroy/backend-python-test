@@ -3,6 +3,7 @@ import sys
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
 
 import sqlite3
 
@@ -15,11 +16,12 @@ SECRET_KEY = 'development key'
 USERNAME = 'admin'
 PASSWORD = 'default'
 PER_PAGE = 3  # small to see pagination with default fixture
-
+BCRYPT_LOG_ROUNDS = 12
 
 app = Flask(__name__)
 app.config.from_object(__name__)
 db = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
 
 
 def connect_db():

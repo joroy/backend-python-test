@@ -1,17 +1,37 @@
 # -*- coding: UTF-8 -*-
 from sqlalchemy import inspect
-from alayatodo import db
+from sqlalchemy.ext.hybrid import (
+    hybrid_property,
+    hybrid_method
+)
+
+from alayatodo import (
+    db,
+    bcrypt
+)
 
 
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(255), nullable=False, unique=True)
-    password = db.Column(db.String(255), nullable=False)
+    _password = db.Column(db.Binary(60), nullable=False)
 
-    def __init__(self, username, password):
+    def __init__(self, username, plaintext_password):
         self.username = username
-        self.password = password
+        self.password = plaintext_password
+
+    @hybrid_property
+    def password(self):
+        return self._password
+
+    @password.setter
+    def password(self, plaintext_password):
+        self._password = bcrypt.generate_password_hash(plaintext_password)
+
+    @hybrid_method
+    def is_correct_password(self, plaintext_password):
+        return bcrypt.check_password_hash(self.password, plaintext_password)
 
 
 class Todo(db.Model):

@@ -7,7 +7,8 @@ from alayatodo import (
 from alayatodo.models import (
     User,
     Todo,
-    object_as_dict)
+    object_as_dict
+)
 
 
 from flask import (
