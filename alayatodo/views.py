@@ -44,14 +44,18 @@ def login_POST():
     username = request.form.get('username')
     password = request.form.get('password')
 
-    user = User.query.filter_by(username=username, password=password).first()
+    user = User.query.filter_by(username=username).first()
     if user:
-        session['user'] = object_as_dict(user)
-        session['logged_in'] = True
-        return redirect('/todo')
-
-    return redirect('/login')
-
+        if user.is_correct_password(password):
+            session['user'] = object_as_dict(user)
+            session['logged_in'] = True
+            return redirect('/todo')
+        else:
+            flash('Invalid password', 'error')
+            return redirect('/login')
+    else:
+        flash('Provide a valid user', 'error')
+        return redirect('/login')
 
 @app.route('/logout')
 def logout():

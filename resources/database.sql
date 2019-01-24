@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE users (
   id INTEGER PRIMARY KEY,
   username VARCHAR(255) NOT NULL,
-  _password VARCHAR(255) NOT NULL
+  _password BINARY(60) NOT NULL
 );
 
 DROP TABLE IF EXISTS todos;
