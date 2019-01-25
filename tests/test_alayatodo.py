@@ -4,7 +4,10 @@ import json
 
 import pytest
 
-from alayatodo import alayatodo
+from alayatodo import (
+    alayatodo,
+    PER_PAGE
+)
 
 
 @pytest.fixture
@@ -90,9 +93,10 @@ def test_todo_done_success(client):
     assert (after)
 
 
-# REMARK: Flaky test, should refactor the test
-# and make add test a JSON response of /todo instead
+# REMARK: Flaky test, should refactor by adding
+# a JSON response to /todo route instead
 def test_pagination(client):
     login(client, "user1", "user1")
     response = client.get('/todo/')
-    assert(re.search('<b>1 - 3</b> todos in\ntotal <b>5', response.get_data(as_text=True)))
+    assert(re.search('<b>1 - {}</b> todos in\ntotal <b>5'.format(PER_PAGE),
+           response.get_data(as_text=True)))
