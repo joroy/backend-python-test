@@ -3,7 +3,14 @@ import sys
 import subprocess
 import os
 
-from flask import Flask
+from flask import (
+    Flask,
+    session,
+    request,
+    redirect,
+    url_for
+)
+
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 
@@ -65,6 +72,12 @@ def connect_db():
     conn = sqlite3.connect(app.config['DATABASE'])
     conn.row_factory = sqlite3.Row
     return conn
+
+
+@app.before_request
+def before_request():
+    if 'logged_in' not in session and request.endpoint not in ['login', 'login_POST']:
+        return redirect(url_for('login'))
 
 
 @app.before_first_request

@@ -68,9 +68,6 @@ def logout():
 @app.route('/todo', methods=['GET'])
 @app.route('/todo/', methods=['GET'])
 def todos():
-    if not session.get('logged_in'):
-        return redirect('/login')
-
     page, per_page, offset = get_page_args()
     todo_paginated = Todo.query.filter_by(user_id=session['user']['id']).limit(per_page).offset(offset)
     todos = Todo.query.filter_by(user_id=session['user']['id'])
@@ -89,9 +86,6 @@ def todos():
 @app.route('/todo', methods=['POST'])
 @app.route('/todo/', methods=['POST'])
 def todos_POST():
-    if not session.get('logged_in'):
-        return redirect('/login')
-
     description = request.form.get('description', '')
     if description:
         new_todo = Todo(user_id=session['user']['id'], description=description)
@@ -105,8 +99,6 @@ def todos_POST():
 
 @app.route('/todo/<id>', methods=['POST'])
 def todo_delete(id):
-    if not session.get('logged_in'):
-        return redirect('/login')
     todo = Todo.query.get_or_404(id)
     flash('Todo #{} has beed deleted'.format(todo.id), 'confirmation')
     db.session.delete(todo)
@@ -116,8 +108,6 @@ def todo_delete(id):
 
 @app.route('/todo/<id>/toggle_done', methods=['POST'])
 def todo_toggle_done(id):
-    if not session.get('logged_in'):
-        return redirect('/login')
     todo = Todo.query.get_or_404(id)
     todo.done = request.form.get('done') == '0'
     db.session.commit()
@@ -126,7 +116,5 @@ def todo_toggle_done(id):
 
 @app.route('/todo/<id>/json', methods=['GET'])
 def todo_JSON(id):
-    if not session.get('logged_in'):
-        return redirect('/login')
     todo = Todo.query.get_or_404(id)
     return jsonify(object_as_dict(todo))

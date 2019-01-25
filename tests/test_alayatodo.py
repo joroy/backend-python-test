@@ -35,10 +35,17 @@ def logout(client, follow_redirects=True):
 
 
 def test_root(client):
+    login(client, "user1", "user1")
     response = client.get('/')
     data = response.get_data()
     assert response.status_code == 200
     assert len(data) > 0
+
+
+def test_root_redirect(client):
+    response = client.get('/')
+    assert response.status_code == 302
+    assert response.headers.get('location') == "http://localhost/login"
 
 
 def test_login_success(client):
