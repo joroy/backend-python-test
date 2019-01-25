@@ -122,12 +122,12 @@ def todo_delete(id):
     return redirect('/todo')
 
 
-@app.route('/todo/<id>/mark_as_done', methods=['POST'])
-def todo_mark_as_done(id):
+@app.route('/todo/<id>/toggle_done', methods=['POST'])
+def todo_toggle_done(id):
     if not session.get('logged_in'):
         return redirect('/login')
     todo = Todo.query.get_or_404(id)
-    todo.done = request.form.get('done') == '1'
+    todo.done = request.form.get('done') == '0'
     db.session.commit()
     return redirect('/todo')
 

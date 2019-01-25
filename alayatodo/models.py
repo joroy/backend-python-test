@@ -15,7 +15,7 @@ class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(255), nullable=False, unique=True)
-    _password = db.Column(db.Binary(60), nullable=False)
+    _password = db.Column(db.LargeBinary(60), nullable=False)
 
     def __init__(self, username, plaintext_password):
         self.username = username
@@ -39,9 +39,9 @@ class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     description = db.Column(db.String(255))
-    done = db.Column(db.Boolean)
+    done = db.Column(db.Boolean, default=False)
 
-    def __init__(self, user_id, description,):
+    def __init__(self, user_id, description):
         self.user_id = user_id
         self.description = description
 

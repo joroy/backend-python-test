@@ -84,8 +84,8 @@ def test_todo_done_success(client):
     todo = _get_one_todo(client)
     before = todo['done']
 
-    client.post('/todo/1/mark_as_done', data=dict(
-                done='1'), follow_redirects=True)
+    client.post('/todo/1/toggle_done', data=dict(
+                done='0'), follow_redirects=True)
     todo_after = _get_one_todo(client)
     after = todo_after['done']
 
