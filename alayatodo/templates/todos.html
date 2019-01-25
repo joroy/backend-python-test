@@ -10,11 +10,9 @@
                 <td>{{ todo.id }}</td>
                 <td>{{ todo.user_id }}</td>
                 <td>
-                    <a href="{{ url_for('todo', id=todo.id) }}">
                     {% if todo.done %}<strike>{% endif%}
                         {{ todo.description }}
                     {% if todo.done %}</strike>{% endif%}
-                    </a>
                 </td>
                 <td>
                     <form method="post" class="form" action="{{ url_for('todo_toggle_done', id=todo.id) }}">

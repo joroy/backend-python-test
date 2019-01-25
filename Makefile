@@ -1,4 +1,4 @@
-.PHONY: all install-dev test coverage cov clean-pyc test-in-docker
+.PHONY: all install-dev test coverage cov lint clean-pyc test-in-docker
 
 all: test
 
@@ -16,6 +16,9 @@ coverage: clean-pyc install-dev
 	coverage html
 
 cov: coverage
+
+lint:
+	flake8
 
 clean-pyc:
 	find . -name '*.pyc' -exec rm -f {} +
